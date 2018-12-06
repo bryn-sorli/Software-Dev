@@ -1,0 +1,236 @@
+Bryn Sorli
+Homework 3
+
+1. SELECT firstname, lastname FROM employees WHERE country <> 'USA' and hiredate < '2013-11-08' ORDER BY firstname;
+ firstname | lastname  
+-----------+-----------
+ Anne      | Dodsworth
+ Michael   | Suyama
+ Robert    | King
+ Steven    | Buchanan
+(4 rows)
+
+
+2. SELECT productid, productname, unitsinstock, unitprice FROM products WHERE unitsinstock < reorderlevel and unitsinstock >0;
+productid |        productname        | unitsinstock | unitprice 
+-----------+---------------------------+--------------+-----------
+         2 | Chang                     |           17 |     19.00
+         3 | Aniseed Syrup             |           13 |     10.00
+        11 | Queso Cabrales            |           22 |     21.00
+        21 | Sir Rodney's Scones       |            3 |     10.00
+        30 | Nord-Ost Matjeshering     |           10 |     25.89
+        32 | Mascarpone Fabioli        |            9 |     32.00
+        37 | Gravad lax                |           11 |     26.00
+        43 | Ipoh Coffee               |           17 |     46.00
+        45 | Rogede sild               |            5 |      9.50
+        48 | Chocolade                 |           15 |     12.75
+        49 | Maxilaku                  |           10 |     20.00
+        56 | Gnocchi di nonna Alice    |           21 |     38.00
+        64 | Wimmers gute Semmelknödel |           22 |     33.25
+        66 | Louisiana Hot Spiced Okra |            4 |     17.00
+        68 | Scottish Longbreads       |            6 |     12.50
+        70 | Outback Lager             |           15 |     15.00
+        74 | Longlife Tofu             |            4 |     10.00
+(17 rows)
+
+3. SELECT productname, unitprice FROM products WHERE unitprice = (SELECT min(unitprice) FROM products) UNION SELECT productname, unitprice FROM products WHERE unitprice = (SELECT MAX(unitprice) FROM products);
+  productname  | unitprice 
+---------------+-----------
+ C?te de Blaye |    263.50
+ Geitost       |      2.50
+(2 rows)
+
+4. SELECT productid, productname, unitsinstock*unitprice AS "Total Inventory Value" FROM products WHERE unitsinstock*unitprice > 1000 ORDER BY unitsinstock*unitprice DESC;
+ productid |           productname            | Total Inventory Value 
+-----------+----------------------------------+-----------------------
+        38 | C?te de Blaye                    |               4479.50
+        59 | Raclette Courdavault             |               4345.00
+        12 | Queso Manchego La Pastora        |               3268.00
+        20 | Sir Rodney's Marmalade           |               3240.00
+        61 | Sirop d'?rable                   |               3220.50
+         6 | Grandma's Boysenberry Spread     |               3000.00
+         9 | Mishi Kobe Niku                  |               2813.00
+        55 | P?t? chinois                     |               2760.00
+        18 | Carnarvon Tigers                 |               2625.00
+        40 | Boston Crab Meat                 |               2263.20
+        22 | Gustaf's Kn?ckebr?d              |               2184.00
+        27 | Schoggi Schokolade               |               2151.10
+        36 | Inlagd Sill                      |               2128.00
+        65 | Louisiana Fiery Hot Pepper Sauce |               1599.80
+        34 | Sasquatch Ale                    |               1554.00
+        73 | R?d Kaviar                       |               1515.00
+        39 | Chartreuse verte                 |               1242.00
+        28 | R?ssle Sauerkraut                |               1185.60
+         4 | Chef Anton's Cajun Seasoning     |               1166.00
+        46 | Spegesild                        |               1140.00
+        25 | NuNuCa Nu?-Nougat-Creme          |               1064.00
+        51 | Manjimup Dried Apples            |               1060.00
+        50 | Valkoinen suklaa                 |               1056.25
+        63 | Vegie-spread                     |               1053.60
+        76 | Lakkalik??ri                     |               1026.00
+(25 rows)
+
+5. SELECT shipcountry, count(orderid) FROM orders WHERE NOT shipcountry = 'Germany' AND extract(year from shippeddate) = '2013' AND extract(month from shippeddate) = '10' GROUP BY shipcountry ORDER BY shipcountry DESC;
+shipcountry | count 
+-------------+-------
+ Venezuela   |     1
+ USA         |     7
+ UK          |     3
+ Sweden      |     1
+ Spain       |     1
+ Portugal    |     2
+ Mexico      |     2
+ Ireland     |     2
+ France      |     2
+ Finland     |     2
+ Canada      |     1
+ Belgium     |     1
+(12 rows)
+
+6. SELECT orders.customerid, orders.shipname FROM orders GROUP BY orders.customerid, orders.shipname HAVING COUNT(orders.customerid) >= 10;
+ customerid |           shipname           
+------------+------------------------------
+ VICTE      | Victuailles en stock
+ LAMAI      | La maison dAsie
+ KOENE      | K?niglich Essen
+ WARTH      | Wartian Herkku
+ BLONP      | Blondel p?re et fils
+ QUICK      | QUICK-Stop
+ FOLKO      | Folk och f? HB
+ WHITC      | White Clover Markets
+ BOTTM      | Bottom-Dollar Markets
+ FRANK      | Frankenversand
+ GODOS      | Godos Cocina T?pica
+ BONAP      | Bon app
+ QUEEN      | Queen Cozinha
+ REGGC      | Reggiani Caseifici
+ ERNSH      | Ernst Handel
+ SAVEA      | Save-a-lot Markets
+ MAGAA      | Magazzini Alimentari Riuniti
+ SUPRD      | Supr?mes d?lices
+ ISLAT      | Island Trading
+ HANAR      | Hanari Carnes
+ BSBEV      | Bs Beverages
+ PICCO      | Piccolo und mehr
+ RATTC      | Rattlesnake Canyon Grocery
+ AROUT      | Around the Horn
+ RICAR      | Ricardo Adocicados
+ VAFFE      | Vaffeljernet
+ WANDK      | Die Wandernde Kuh
+ HUNGO      | Hungry Owl All-Night Grocers
+ RICSU      | Richter Supermarkt
+ GREAL      | Great Lakes Food Market
+ HILAA      | HILARI?N-Abastos
+ BERGS      | Berglunds snabbk?p
+ LEHMS      | Lehmanns Marktstand
+ TORTU      | Tortuga Restaurante
+ LILAS      | LILA-Supermercado
+ LINOD      | LINO-Delicateses
+ MEREP      | M?re Paillarde
+(37 rows)
+
+7. SELECT products.supplierid, SUM(products.unitsinstock*products.unitprice) AS "value of inventory" FROM products GROUP BY products.supplierid HAVING COUNT(products.supplierid) >= 5;
+ supplierid | value of inventory 
+------------+--------------------
+          7 |            4409.65
+         12 |            3301.85
+(2 rows)
+
+8. SELECT suppliers.companyname, products.productname, products.unitprice FROM suppliers FULL JOIN products ON suppliers.supplierid = products.supplierid WHERE suppliers.country = 'USA' OR suppliers.country = 'Germany' ORDER BY products.unitprice DESC;
+              companyname               |           productname            | unitprice 
+----------------------------------------+----------------------------------+-----------
+ Plutzer Lebensmittelgroßmärkte AG    | Th?ringer Rostbratwurst          |    123.79
+ Plutzer Lebensmittelgroßmärkte AG    | R?ssle Sauerkraut                |     45.60
+ Heli Süßwaren GmbH & Co. KG          | Schoggi Schokolade               |     43.90
+ Grandma Kelly's Homestead              | Northwoods Cranberry Sauce       |     40.00
+ Plutzer Lebensmittelgroßmärkte AG    | Wimmers gute Semmelkn?del        |     33.25
+ Heli Süßwaren GmbH & Co. KG          | Gumb?r Gummib?rchen              |     31.23
+ Grandma Kelly's Homestead              | Uncle Bob's Organic Dried Pears  |     30.00
+ Nord-Ost-Fisch Handelsgesellschaft mbH | Nord-Ost Matjeshering            |     25.89
+ Grandma Kelly's Homestead              | Grandma's Boysenberry Spread     |     25.00
+ New Orleans Cajun Delights             | Chef Anton's Cajun Seasoning     |     22.00
+ New Orleans Cajun Delights             | Chef Anton's Gumbo Mix           |     21.35
+ New Orleans Cajun Delights             | Louisiana Fiery Hot Pepper Sauce |     21.05
+ New England Seafood Cannery            | Boston Crab Meat                 |     18.40
+ Bigfoot Breweries                      | Steeleye Stout                   |     18.00
+ New Orleans Cajun Delights             | Louisiana Hot Spiced Okra        |     17.00
+ Heli Süßwaren GmbH & Co. KG          | NuNuCa Nu?-Nougat-Creme          |     14.00
+ Bigfoot Breweries                      | Sasquatch Ale                    |     14.00
+ Bigfoot Breweries                      | Laughing Lumberjack Lager        |     14.00
+ Plutzer Lebensmittelgroßmärkte AG    | Original Frankfurter gr?ne So?e  |     13.00
+ New England Seafood Cannery            | Jack's New England Clam Chowder  |      9.65
+ Plutzer Lebensmittelgroßmärkte AG    | Rh?nbr?u Klosterbier             |      7.75
+(21 rows)
+
+9. SELECT employees.lastname, employees.firstname, employees.title, employees.extension, COUNT(orders.employeeid) as "Number of orders" FROM employees FULL JOIN orders ON employees.employeeid = orders.employeeid GROUP BY employees.lastname, employees.firstname, employees.title, employees.extension HAVING COUNT(orders.employeeid) > 50 ORDER BY (employees.lastname, employees.firstname) DESC;
+ lastname  | firstname |          title           | extension | Number of orders 
+-----------+-----------+--------------------------+-----------+------------------
+ Suyama    | Michael   | Sales Representative     | 428       |               67
+ Peacock   | Margaret  | Sales Representative     | 5176      |              156
+ Leverling | Janet     | Sales Representative     | 3355      |              127
+ King      | Robert    | Sales Representative     | 465       |               72
+ Fuller    | Andrew    | Vice President of Sales  | 3457      |               96
+ Davolio   | Nancy     | Sales Representative     | 5467      |              123
+ Callahan  | Laura     | Inside Sales Coordinator | 2344      |              104
+(7 rows)
+
+
+10. SELECT customers.customerid, customers.companyname FROM customers FULL JOIN orders ON orders.customerid = customers.customerid GROUP BY customers.companyname, customers.customerid HAVING COUNT(orders.customerid) = 0;
+ customerid |             companyname              
+------------+--------------------------------------
+ FISSA      | FISSA Fabrica Inter. Salchichas S.A.
+ PARIS      | Paris specialites
+(2 rows)
+
+
+11. SELECT suppliers.companyname, suppliers.contactname, categories.categoryname, categories.description, products.productname, products.unitsonorder FROM suppliers FULL JOIN products ON products.supplierid = suppliers.supplierid FULL JOIN categories ON products.categoryid = categories.categoryid GROUP BY suppliers.companyname, suppliers.contactname, categories.categoryname, categories.description, products.productname, products.unitsonorder, products.unitsinstock HAVING products.unitsinstock = 0;
+             companyname             |   contactname   |  categoryname  |                        description                         |       productname       | unitsonorder 
+-------------------------------------+-----------------+----------------+------------------------------------------------------------+-------------------------+--------------
+ Formaggi Fortini s.r.l.             | Elio Rossi      | Dairy Products | Cheeses                                                    | Gorgonzola Telino       |           70
+ G'day Mate                          | Wendy Mackenzie | Meat/Poultry   | Prepared meats                                             | Perth Pasties           |            0
+ New Orleans Cajun Delights          | Shelley Burke   | Condiments     | Sweet and savory sauces, relishes, spreads, and seasonings | Chef Anton's Gumbo Mix  |            0
+ Pavlova Ltd.                        | Ian Devling     | Meat/Poultry   | Prepared meats                                             | Alice Mutton            |            0
+ Plutzer Lebensmittelgroßmärkte AG | Martin Bein     | Meat/Poultry   | Prepared meats                                             | Th?ringer Rostbratwurst |            0
+(5 rows)
+
+12. SELECT products.productname, suppliers.companyname, suppliers.country, products.unitsinstock FROM products FULL JOIN suppliers ON products.supplierid = suppliers.supplierid GROUP BY  products.productname, suppliers.companyname, suppliers.country, products.unitsinstock, products.quantityperunit HAVING products.quantityperunit LIKE '%bags%' OR products.quantityperunit LIKE '%bottles%';
+           productname            |             companyname             |  country  | unitsinstock 
+----------------------------------+-------------------------------------+-----------+--------------
+ Aniseed Syrup                    | Exotic Liquids                      | UK        |           13
+ Chai                             | Exotic Liquids                      | UK        |           39
+ Chang                            | Exotic Liquids                      | UK        |           17
+ C?te de Blaye                    | Aux joyeux ecclésiastiques         | France    |           17
+ Genen Shouyu                     | Mayumi's                            | Japan     |           39
+ Gula Malacca                     | Leka Trading                        | Singapore |           27
+ Gumb?r Gummib?rchen              | Heli Süßwaren GmbH & Co. KG       | Germany   |           15
+ Laughing Lumberjack Lager        | Bigfoot Breweries                   | USA       |           52
+ Louisiana Fiery Hot Pepper Sauce | New Orleans Cajun Delights          | USA       |           76
+ Outback Lager                    | Pavlova Ltd.                        | Australia |           15
+ Rh?nbr?u Klosterbier             | Plutzer Lebensmittelgroßmärkte AG | Germany   |          125
+ Sasquatch Ale                    | Bigfoot Breweries                   | USA       |          111
+ Sirop d'?rable                   | Forêts dérables                   | Canada    |          113
+ Steeleye Stout                   | Bigfoot Breweries                   | USA       |           20
+ Th?ringer Rostbratwurst          | Plutzer Lebensmittelgroßmärkte AG | Germany   |            0
+ Wimmers gute Semmelkn?del        | Plutzer Lebensmittelgroßmärkte AG | Germany   |           22
+(16 rows)
+
+13. CREATE TABLE Top_Items(ItemID int NOT NULL PRIMARY KEY, ItemCode int NOT NULL, ItemName varchar(40) NOT NULL, InventoryDate timestamp NOT NULL, SupplierID int NOT NULL, ItemQuantity int NOT NULL, ItemPrice decimal(9,2) NOT NULL);
+
+CREATE TABLE
+
+14. INSERT INTO Top_Items (ItemID, itemcode, itemname, inventorydate, itemquantity, itemprice, supplierid) SELECT productid, categoryid, productname, current_timestamp, unitsinstock, unitprice, supplierid  FROM products WHERE unitsinstock*unitprice > 1500;
+INSERT 0 16
+
+15. DELETE FROM Top_Items WHERE supplierid in (SELECT supplierid FROM suppliers WHERE suppliers.country = 'USA' OR suppliers.country = 'Canada');
+DELETE 6
+
+16. ALTER TABLE Top_Items ADD InventoryValue decimal(9,2);
+ALTER TABLE
+
+17. UPDATE Top_Items SET inventoryvalue = itemquantity*itemprice;
+UPDATE 10
+
+18. DROP TABLE Top_Items;
+DROP TABLE
+
+
